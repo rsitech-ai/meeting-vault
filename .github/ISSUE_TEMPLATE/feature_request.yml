@@ -1,0 +1,39 @@
+name: Feature request
+description: Propose a focused improvement that preserves MeetingVault's local-first model.
+title: "[Feature]: "
+labels:
+  - enhancement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Explain the user problem before proposing an interface. Do not include real meeting content or confidential workplace details.
+  - type: textarea
+    id: problem
+    attributes:
+      label: User problem
+      description: What cannot be done safely or clearly today?
+    validations:
+      required: true
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Desired outcome
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed approach
+      description: Optional. Include alternatives if they clarify the trade-off.
+  - type: textarea
+    id: privacy
+    attributes:
+      label: Privacy, permissions, and data-flow impact
+      description: Identify any new network, storage, capture, system-integration, or entitlement surface.
+    validations:
+      required: true
+  - type: textarea
+    id: limitations
+    attributes:
+      label: Constraints or non-goals

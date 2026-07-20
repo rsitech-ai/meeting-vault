@@ -1,0 +1,33 @@
+.DS_Store
+.build/
+.swiftpm/
+dist/
+DerivedData/
+*.xcresult/
+*.dSYM/
+*.xcuserstate
+*.xcuserdata/
+*.xcodeproj/
+*.xcworkspace/
+.idea/
+.vscode/
+*.log
+*.tmp
+*.meetingvault/
+.public-export/
+.env
+.env.*
+!.env.example
+*.p12
+*.cer
+*.provisionprofile
+*.mobileprovision
+*.notarytool
+__pycache__/
+*.py[cod]
+
+# Model executables and weights are installed explicitly at runtime and must
+# never enter source or release archives. Only the checksummed JSON manifest
+# and text notices belong under MeetingVaultCore/Resources.
+Sources/MeetingVaultCore/Resources/LocalModels/
+Sources/MeetingVaultCore/Resources/ModelDownloads/

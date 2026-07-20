@@ -1,0 +1,64 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: macos-26
+    timeout-minutes: 45
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+
+      - name: Show toolchain
+        run: |
+          sw_vers
+          swift --version
+
+      - name: Validate shell, Python, and property-list tooling
+        run: |
+          command -v python3 >/dev/null || { echo "python3 is required for local-model fixture verification" >&2; exit 1; }
+          python3 --version
+          python3 -m py_compile script/generate_local_model_manifest.py
+          bash -n script/*.sh
+          for file in config/entitlements/*.plist Sources/MeetingVault/Resources/PrivacyInfo.xcprivacy; do
+            plutil -lint "$file"
+          done
+          for file in README.md CONTRIBUTING.md SECURITY.md SUPPORT.md CODE_OF_CONDUCT.md PRIVACY.md RELEASING.md CHANGELOG.md PUBLIC_SOURCE.md TRADEMARKS.md NOTICE docs/architecture.md docs/release-notes-0.1.0.md docs/troubleshooting.md; do
+            test -s "$file"
+          done
+
+      - name: Test local model generator and guard fixtures
+        run: |
+          python3 -m unittest Tests/ScriptTests/test_generate_local_model_manifest.py -v
+          python3 -m unittest Tests/ScriptTests/test_check_local_model_supply_chain.py -v
+
+      - name: Check local model supply chain
+        run: script/check_local_model_supply_chain.sh
+
+      - name: Test
+        run: swift test
+
+      - name: Release build with warnings as errors
+        run: swift build -c release -Xswiftc -warnings-as-errors
+
+      - name: Check public export contract
+        run: |
+          export_dir="$(mktemp -d)/meeting-vault-public"
+          script/export_public_source.sh --output "$export_dir"
+          test -f "$export_dir/SOURCE_COMMIT"
+          test ! -e "$export_dir/.git"
+          test ! -e "$export_dir/docs/evidence"

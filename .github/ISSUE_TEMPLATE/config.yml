@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Private vulnerability report
+    url: https://github.com/rsitech-ai/meeting-vault/security/advisories/new
+    about: Report suspected security or privacy vulnerabilities privately.
+  - name: Support guide
+    url: https://github.com/rsitech-ai/meeting-vault/blob/main/SUPPORT.md
+    about: Check supported configurations and troubleshooting routes before opening an issue.
