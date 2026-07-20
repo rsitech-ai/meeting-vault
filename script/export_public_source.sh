@@ -100,6 +100,7 @@ for path in \
   .gitignore \
   LICENSE \
   NOTICE \
+  MAINTAINERS.md \
   README.md \
   CONTRIBUTING.md \
   SECURITY.md \
