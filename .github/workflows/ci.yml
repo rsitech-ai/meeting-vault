@@ -37,7 +37,7 @@ jobs:
           for file in config/entitlements/*.plist Sources/MeetingVault/Resources/PrivacyInfo.xcprivacy; do
             plutil -lint "$file"
           done
-          for file in README.md CONTRIBUTING.md SECURITY.md SUPPORT.md CODE_OF_CONDUCT.md PRIVACY.md RELEASING.md CHANGELOG.md PUBLIC_SOURCE.md TRADEMARKS.md NOTICE docs/architecture.md docs/release-notes-0.1.0.md docs/troubleshooting.md; do
+          for file in README.md CONTRIBUTING.md SECURITY.md SUPPORT.md CODE_OF_CONDUCT.md PRIVACY.md RELEASING.md CHANGELOG.md PUBLIC_SOURCE.md TRADEMARKS.md MAINTAINERS.md NOTICE docs/architecture.md docs/release-notes-0.1.0.md docs/troubleshooting.md; do
             test -s "$file"
           done
 

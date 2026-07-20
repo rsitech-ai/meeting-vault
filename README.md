@@ -97,7 +97,7 @@ The source is buildable and extensively tested, but a tag is a release candidate
 
 ## Contributing and support
 
-Issues and pull requests are welcome. Start with [CONTRIBUTING.md](CONTRIBUTING.md), review the [support boundary](SUPPORT.md), follow [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md), and report vulnerabilities through the private process in [SECURITY.md](SECURITY.md). MeetingVault is maintained by [RSI Tech](https://rsitech.ai); project contact is [info@rsitech.ai](mailto:info@rsitech.ai).
+Issues and pull requests are welcome. Start with [CONTRIBUTING.md](CONTRIBUTING.md), review the [maintainer policy](MAINTAINERS.md) and [support boundary](SUPPORT.md), follow [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md), and report vulnerabilities through the private process in [SECURITY.md](SECURITY.md). MeetingVault is maintained by [RSI Tech](https://rsitech.ai); project contact is [info@rsitech.ai](mailto:info@rsitech.ai).
 
 MeetingVault has no paid features or license keys.
 
