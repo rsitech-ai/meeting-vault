@@ -155,6 +155,30 @@ cleanup_signing_log() {
   rm -f "$signing_log"
 }
 trap cleanup_signing_log EXIT
+
+# Sign nested Mach-O helpers inside-out before the outer .app. Staging may leave
+# linker-signed ad-hoc helpers that notarization rejects.
+nested_sign_args=(--force --timestamp --sign "$IDENTITY")
+if [[ "$MODE" == "direct" ]]; then
+  nested_sign_args=(--force --timestamp --options runtime --sign "$IDENTITY")
+fi
+if [[ -d "$APP_BUNDLE/Contents/Helpers" ]]; then
+  while IFS= read -r -d '' nested_binary; do
+    if ! file "$nested_binary" | grep -q 'Mach-O'; then
+      continue
+    fi
+    printf '[INFO] Signing nested binary %s\n' "$nested_binary"
+    if ! codesign "${nested_sign_args[@]}" "$nested_binary" >>"$signing_log" 2>&1; then
+      if grep -q 'errSecInternalComponent' "$signing_log"; then
+        printf '[BLOCKED] %s private key is not usable by codesign in this session. Authorize or repair the signing-key access control, then retry.\n' "$identity_pattern" >&2
+      else
+        printf '[BLOCKED] Nested binary signing failed for %s.\n' "$nested_binary" >&2
+      fi
+      exit 1
+    fi
+  done < <(find "$APP_BUNDLE/Contents/Helpers" -type f -perm -111 -print0)
+fi
+
 codesign "${sign_args[@]}" "$APP_BUNDLE" >"$signing_log" 2>&1 &
 codesign_pid=$!
 (
