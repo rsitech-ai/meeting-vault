@@ -177,11 +177,34 @@ else
 fi
 
 codesign_output="$(codesign -dvvv --entitlements :- "$APP_PATH" 2>&1 || true)"
-codesign_verify_output="$(codesign --verify --strict --verbose=2 "$APP_PATH" 2>&1 || true)"
+codesign_verify_output="$(codesign --verify --deep --strict --verbose=2 "$APP_PATH" 2>&1 || true)"
 if printf '%s\n' "$codesign_verify_output" | grep -Eq 'valid on disk|satisfies its Designated Requirement'; then
   ok "Code signature verifies on disk"
 else
   block "Code signature verification failed: $(printf '%s\n' "$codesign_verify_output" | head -1)"
+fi
+
+helper_binary="$APP_PATH/Contents/Helpers/MeetingVaultLocalModelSelfCheck"
+if [[ -f "$helper_binary" ]]; then
+  helper_output="$(codesign -dvvv "$helper_binary" 2>&1 || true)"
+  if printf '%s\n' "$helper_output" | grep -q 'Signature=adhoc'; then
+    block "Nested helper is ad-hoc signed; resign Contents/Helpers with the distribution identity before notarization"
+  elif [[ "$MODE" == "direct" ]] && printf '%s\n' "$helper_output" | grep -Eq 'Authority=Developer ID Application'; then
+    if printf '%s\n' "$helper_output" | grep -q 'runtime'; then
+      ok "Nested helper is Developer ID signed with hardened runtime"
+    else
+      block "Nested helper is missing hardened runtime"
+    fi
+    if printf '%s\n' "$helper_output" | grep -Eq 'Timestamp|Signed Time'; then
+      ok "Nested helper includes a secure timestamp"
+    else
+      block "Nested helper signature is missing a secure timestamp"
+    fi
+  elif [[ "$MODE" == "app-store" ]] && printf '%s\n' "$helper_output" | grep -Eq 'Authority=Apple Distribution'; then
+    ok "Nested helper is Apple Distribution signed"
+  else
+    block "Nested helper is not signed with the required $MODE distribution authority"
+  fi
 fi
 
 if printf '%s\n' "$codesign_output" | grep -q 'code object is not signed at all'; then
