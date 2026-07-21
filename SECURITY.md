@@ -2,7 +2,7 @@
 
 ## Supported versions
 
-Security fixes are provided for the latest published prerelease. Until the first public release exists, use the current default branch and treat all builds as development software.
+Security fixes are provided for the latest published prerelease on GitHub Releases. Prefer the latest tagged release over untagged development builds.
 
 ## Report a vulnerability
 

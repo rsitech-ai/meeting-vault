@@ -12,6 +12,10 @@ MeetingVault is distributed directly through GitHub Releases. A release is publi
    xcrun notarytool store-credentials MeetingVault-Notary
    ```
 
+   Any Keychain profile created with `notarytool store-credentials` for the
+   same Apple Developer account may be passed to packaging. Prefer a
+   MeetingVault-specific profile name so credentials stay easy to rotate.
+
 4. Confirm the identity is visible and usable:
 
    ```bash
