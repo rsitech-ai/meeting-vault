@@ -23,7 +23,7 @@ let package = Package(
         .library(name: "MeetingVaultCore", targets: ["MeetingVaultCore"])
     ],
     dependencies: [
-        .package(url: "https://github.com/FluidInference/FluidAudio.git", exact: "0.15.5")
+        .package(url: "https://github.com/FluidInference/FluidAudio.git", exact: "0.18.0")
     ],
     targets: [
         .systemLibrary(
